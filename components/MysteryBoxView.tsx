@@ -136,7 +136,7 @@ export const MysteryBoxView: React.FC = () => {
             <p className={`text-sm leading-relaxed italic ${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'}`}>"{result.outlook}"</p>
           </section>
 
-          <button onClick={handleReset} className={`w-full py-3 rounded-xl transition-colors text-sm font-medium ${theme === 'dark' ? 'bg-white/5 text-slate-400 hover:text-white' : 'bg-black/5 text-slate-500 hover:text-slate-800'}`}>开启另一个盲盒</button>
+          <button onClick={handleReset} className={`w-full py-3 rounded-xl transition-all text-sm font-bold ${theme === 'dark' ? 'bg-white/10 text-slate-200 hover:bg-white/20' : 'bg-indigo-50 text-indigo-500 hover:bg-indigo-100'}`}>开启另一个盲盒</button>
         </div>
       </div>
     );
@@ -150,9 +150,26 @@ export const MysteryBoxView: React.FC = () => {
       </div>
       <div className="grid grid-cols-3 gap-4">
         {ZODIAC_SIGNS.map((sign) => (
-          <button key={sign.id} onClick={() => handleOpenBox(sign)} className={`flex flex-col items-center justify-center p-6 rounded-2xl glass-card transition-all active:scale-95 border-white/5 group`}>
-            <div className="text-4xl mb-2 grayscale opacity-50 group-hover:grayscale-0 group-hover:opacity-100 transition-all transform group-hover:scale-110 duration-500">🎁</div>
-            <span className={`text-xs font-medium ${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'}`}>{sign.name}</span>
+          <button 
+            key={sign.id} 
+            onClick={() => handleOpenBox(sign)} 
+            className={`flex flex-col items-center justify-center p-5 rounded-2xl glass-card transition-all duration-300 active:scale-95 border-white/5 group relative overflow-hidden`}
+          >
+            {/* 动态背景装饰 */}
+            <div className={`absolute inset-0 bg-gradient-to-br ${sign.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}></div>
+            
+            {/* 彩色礼盒图标 */}
+            <div className="text-4xl mb-2 transition-all transform group-hover:scale-125 group-hover:rotate-6 duration-500 drop-shadow-sm">
+              🎁
+            </div>
+            <span className={`text-xs font-bold ${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'} transition-colors group-hover:text-indigo-500`}>
+              {sign.name}
+            </span>
+            
+            {/* 装饰小星星 */}
+            <div className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity text-[8px] text-yellow-400">
+              <i className="fas fa-star animate-pulse"></i>
+            </div>
           </button>
         ))}
       </div>

@@ -216,8 +216,8 @@ const ProfileView: React.FC = () => {
               onClick={() => setFilter(cat)}
               className={`whitespace-nowrap px-4 py-1.5 rounded-full text-xs font-medium transition-all ${
                 filter === cat 
-                  ? 'bg-purple-500 text-white shadow-lg shadow-purple-500/25 scale-105' 
-                  : `${theme === 'dark' ? 'bg-white/5 text-slate-400 hover:bg-white/10' : 'bg-black/5 text-slate-500 hover:bg-black/10'}`
+                  ? 'bg-gradient-to-r from-purple-500 to-indigo-500 text-white shadow-lg shadow-purple-500/25 scale-105' 
+                  : `${theme === 'dark' ? 'bg-white/10 text-slate-300 hover:bg-white/20' : 'bg-indigo-50 text-indigo-400 hover:bg-indigo-100'}`
               }`}
             >
               {cat}
@@ -228,7 +228,7 @@ const ProfileView: React.FC = () => {
         <div className="flex justify-end px-1">
           <button 
             onClick={() => setSortOrder(prev => prev === 'new' ? 'old' : 'new')}
-            className={`flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider ${theme === 'dark' ? 'text-slate-500 hover:text-purple-400' : 'text-slate-400 hover:text-indigo-600'} transition-colors`}
+            className={`flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider ${theme === 'dark' ? 'text-slate-500 hover:text-purple-400' : 'text-indigo-400 hover:text-indigo-600'} transition-colors`}
           >
             <i className={`fas ${sortOrder === 'new' ? 'fa-arrow-down-short-wide' : 'fa-arrow-up-wide-short'}`}></i>
             {sortOrder === 'new' ? '从新到旧' : '从旧到新'}
@@ -282,7 +282,7 @@ const Layout: React.FC = () => {
         <div className="absolute top-8 right-4 z-50">
           <button 
             onClick={toggleTheme}
-            className={`w-10 h-10 rounded-full flex items-center justify-center glass-card border-none transition-transform active:scale-90`}
+            className={`w-10 h-10 rounded-full flex items-center justify-center glass-card border-none shadow-lg transition-transform active:scale-90`}
             aria-label="Toggle Theme"
           >
             {theme === 'dark' ? (
@@ -299,7 +299,7 @@ const Layout: React.FC = () => {
               星语占卜
             </h1>
           </div>
-          <p className={`text-xs uppercase tracking-tighter ${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>Celestial Guidance</p>
+          <p className={`text-xs uppercase tracking-tighter ${theme === 'dark' ? 'text-slate-400' : 'text-indigo-500/70'}`}>Celestial Guidance</p>
         </header>
 
         <main className="relative z-10">
@@ -313,33 +313,33 @@ const Layout: React.FC = () => {
 
         <div className="fixed bottom-0 left-0 right-0 p-4 pointer-events-none z-50">
           <div className="max-w-md mx-auto pointer-events-auto">
-            <nav className={`glass-card rounded-full p-2 flex items-center justify-around border-white/10 shadow-2xl backdrop-blur-xl ${theme === 'dark' ? 'bg-slate-900/80' : 'bg-white/90'}`}>
+            <nav className={`glass-card rounded-3xl p-2.5 flex items-center justify-around border-white/10 shadow-2xl backdrop-blur-2xl ${theme === 'dark' ? 'bg-slate-900/80' : 'bg-white/95'}`}>
               <NavLink to="/" className={({ isActive }) => 
-                `flex flex-col items-center p-2 transition-all duration-300 ${isActive ? 'text-purple-500 scale-110' : 'text-slate-400 hover:text-slate-600'}`
+                `flex flex-col items-center p-2 transition-all duration-300 ${isActive ? 'text-purple-500 scale-110' : 'text-slate-300 dark:text-slate-500 hover:text-indigo-400'}`
               }>
                 <i className="fas fa-sparkles text-lg"></i>
-                <span className="text-[10px] mt-1 font-medium">运势</span>
+                <span className="text-[10px] mt-1 font-bold">运势</span>
               </NavLink>
               
               <NavLink to="/match" className={({ isActive }) => 
-                `flex flex-col items-center p-2 transition-all duration-300 ${isActive ? 'text-pink-500 scale-110' : 'text-slate-400 hover:text-slate-600'}`
+                `flex flex-col items-center p-2 transition-all duration-300 ${isActive ? 'text-pink-500 scale-110' : 'text-slate-300 dark:text-slate-500 hover:text-pink-400'}`
               }>
                 <i className="fas fa-heart text-lg"></i>
-                <span className="text-[10px] mt-1 font-medium">配对</span>
+                <span className="text-[10px] mt-1 font-bold">配对</span>
               </NavLink>
               
               <NavLink to="/mystery" className={({ isActive }) => 
-                `flex flex-col items-center p-2 transition-all duration-300 ${isActive ? 'text-blue-500 scale-110' : 'text-slate-400 hover:text-slate-600'}`
+                `flex flex-col items-center p-2 transition-all duration-300 ${isActive ? 'text-blue-500 scale-110' : 'text-slate-300 dark:text-slate-500 hover:text-blue-400'}`
               }>
                 <i className="fas fa-box-open text-lg"></i>
-                <span className="text-[10px] mt-1 font-medium">盲盒</span>
+                <span className="text-[10px] mt-1 font-bold">盲盒</span>
               </NavLink>
               
               <NavLink to="/profile" className={({ isActive }) => 
-                `flex flex-col items-center p-2 transition-all duration-300 ${isActive ? 'text-amber-500 scale-110' : 'text-slate-400 hover:text-slate-600'}`
+                `flex flex-col items-center p-2 transition-all duration-300 ${isActive ? 'text-amber-500 scale-110' : 'text-slate-300 dark:text-slate-500 hover:text-amber-500'}`
               }>
                 <i className="fas fa-user text-lg"></i>
-                <span className="text-[10px] mt-1 font-medium">我的</span>
+                <span className="text-[10px] mt-1 font-bold">我的</span>
               </NavLink>
             </nav>
           </div>

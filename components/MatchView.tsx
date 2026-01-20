@@ -88,9 +88,13 @@ export const MatchView: React.FC = () => {
             <div className="flex-1">
               <div 
                 onClick={() => setSign1(null)}
-                className={`h-24 w-full glass-card rounded-2xl flex items-center justify-center text-4xl border-dashed border-2 cursor-pointer transition-all ${sign1 ? 'border-purple-500/50 scale-105 bg-purple-500/5 shadow-[0_0_15px_rgba(168,85,247,0.2)]' : theme === 'dark' ? 'border-slate-700 hover:border-slate-500' : 'border-slate-300 hover:border-indigo-400'}`}
+                className={`h-24 w-full glass-card rounded-2xl flex items-center justify-center text-4xl border-dashed border-2 cursor-pointer transition-all ${sign1 ? `border-purple-500/50 scale-105 bg-purple-500/5 shadow-[0_0_15px_rgba(168,85,247,0.2)]` : theme === 'dark' ? 'border-slate-700 hover:border-slate-500' : 'border-slate-300 hover:border-indigo-400'}`}
               >
-                {sign1 ? sign1.icon : <i className={`fas fa-plus ${theme === 'dark' ? 'text-slate-700' : 'text-slate-300'} text-xl`}></i>}
+                {sign1 ? (
+                  <span className={`bg-gradient-to-br ${sign1.color} bg-clip-text text-transparent`}>{sign1.icon}</span>
+                ) : (
+                  <i className={`fas fa-plus ${theme === 'dark' ? 'text-slate-700' : 'text-slate-300'} text-xl`}></i>
+                )}
               </div>
               <p className={`text-center text-xs mt-2 font-medium ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>{sign1 ? sign1.name : '选择星座一'}</p>
             </div>
@@ -102,9 +106,15 @@ export const MatchView: React.FC = () => {
             <div className="flex-1">
               <div 
                 onClick={() => setSign2(null)}
-                className={`h-24 w-full glass-card rounded-2xl flex items-center justify-center text-4xl border-dashed border-2 cursor-pointer transition-all ${sign2 ? 'border-pink-500/50 scale-105 bg-pink-500/5 shadow-[0_0_15px_rgba(236,72,153,0.2)]' : sign1 ? 'border-pink-400/50 animate-pulse bg-pink-500/5' : theme === 'dark' ? 'border-slate-700 hover:border-slate-500' : 'border-slate-300 hover:border-indigo-400'}`}
+                className={`h-24 w-full glass-card rounded-2xl flex items-center justify-center text-4xl border-dashed border-2 cursor-pointer transition-all ${sign2 ? `border-pink-500/50 scale-105 bg-pink-500/5 shadow-[0_0_15px_rgba(236,72,153,0.2)]` : sign1 ? 'border-pink-400/50 animate-pulse bg-pink-500/5' : theme === 'dark' ? 'border-slate-700 hover:border-slate-500' : 'border-slate-300 hover:border-indigo-400'}`}
               >
-                {sign2 ? sign2.icon : sign1 ? <i className="fas fa-sparkles text-pink-400/60 text-xl"></i> : <i className={`fas fa-plus ${theme === 'dark' ? 'text-slate-700' : 'text-slate-300'} text-xl`}></i>}
+                {sign2 ? (
+                   <span className={`bg-gradient-to-br ${sign2.color} bg-clip-text text-transparent`}>{sign2.icon}</span>
+                ) : sign1 ? (
+                  <i className="fas fa-sparkles text-pink-400/60 text-xl"></i>
+                ) : (
+                  <i className={`fas fa-plus ${theme === 'dark' ? 'text-slate-700' : 'text-slate-300'} text-xl`}></i>
+                )}
               </div>
               <p className={`text-center text-xs mt-2 font-medium transition-colors ${sign1 && !sign2 ? 'text-pink-400' : theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>
                 {sign2 ? sign2.name : '选择星座二'}
@@ -132,15 +142,15 @@ export const MatchView: React.FC = () => {
                     }} 
                     disabled={isSelected}
                     className={`flex flex-col items-center justify-center p-3 rounded-2xl transition-all relative group ${ 
-                      isSelected ? 'bg-purple-600/40 text-white scale-95 border border-purple-500/50' : 
-                      isAvailable ? `${theme === 'dark' ? 'bg-pink-500/5' : 'bg-pink-50'} hover:bg-pink-500/10 text-slate-700 dark:text-slate-200 ring-1 ring-pink-500/10 active:scale-95` :
+                      isSelected ? 'scale-90 opacity-40 grayscale-[0.5]' : 
+                      isAvailable ? `${theme === 'dark' ? 'bg-pink-500/5' : 'bg-pink-50'} hover:bg-pink-500/10 text-slate-700 dark:text-slate-200 ring-1 ring-pink-500/10 active:scale-95 shadow-sm` :
                       `${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'} hover:bg-black/5 dark:hover:bg-white/5 border border-transparent` 
                     }`}
                   >
-                    <div className={`text-3xl transition-transform duration-300 ${isAvailable ? 'group-hover:scale-110' : ''}`}>
+                    <div className={`text-3xl transition-all duration-300 bg-gradient-to-br ${s.color} bg-clip-text text-transparent ${isAvailable ? 'group-hover:scale-110 drop-shadow-sm' : ''}`}>
                       {s.icon}
                     </div>
-                    <div className="text-xs mt-1 font-medium">{s.name}</div>
+                    <div className={`text-xs mt-1 font-medium ${theme === 'dark' ? 'text-slate-300' : 'text-slate-700'}`}>{s.name}</div>
                     {isAvailable && (
                       <div className="absolute top-1 right-1 w-2 h-2 bg-pink-500 rounded-full animate-ping"></div>
                     )}
@@ -198,7 +208,7 @@ export const MatchView: React.FC = () => {
             </div>
           </div>
           <div className="flex flex-col gap-3">
-            <button onClick={resetMatch} className={`w-full py-4 rounded-xl text-sm font-medium transition-all border ${theme === 'dark' ? 'text-slate-200 bg-white/5 hover:bg-white/10 border-white/5' : 'text-slate-700 bg-black/5 hover:bg-black/10 border-black/5'}`}>重新配对</button>
+            <button onClick={resetMatch} className={`w-full py-4 rounded-xl text-sm font-bold transition-all ${theme === 'dark' ? 'bg-white/10 text-slate-200 hover:bg-white/20 border-white/5' : 'bg-indigo-50 text-indigo-500 hover:bg-indigo-100 border-indigo-100'} border`}>重新配对</button>
             <NavLink to="/profile" className="text-center text-xs text-slate-500 hover:text-purple-500 py-2 transition-colors">
               <i className="fas fa-history mr-1"></i> 查看所有记录
             </NavLink>
