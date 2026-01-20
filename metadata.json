@@ -1,0 +1,5 @@
+{
+  "name": "星语占卜 - 你的专属星座解析",
+  "description": "基于 Gemini AI 的全方位星座运势与性格解析，提供今日运势、恋爱匹配、性格盲盒等趣味功能。",
+  "requestFramePermissions": []
+}
