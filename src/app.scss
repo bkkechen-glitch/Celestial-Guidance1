@@ -1,0 +1,36 @@
+
+/* 
+ * 引入 Tailwind (需要配置 weapp-tailwindcss) 
+ * 或者手动写入常用的 utility classes
+ */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* 小程序重置 */
+page {
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Segoe UI, Arial, Roboto, 'PingFang SC', 'miui', 'Hiragino Sans GB', 'Microsoft Yahei', sans-serif;
+}
+
+view, text, image, input, button {
+  box-sizing: border-box;
+}
+
+/* 图标字体占位 - 请去 iconfont.cn 下载并将 base64 放入这里 */
+/* @font-face { font-family: 'iconfont'; src: url('base64...') } .iconfont { font-family: 'iconfont'; } */
+
+/* 动画 */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.animate-spin {
+  animation: spin 10s linear infinite;
+}
+
+/* 玻璃拟态替代方案 (小程序对 backdrop-filter 支持不好) */
+.glass-card {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  /* backdrop-filter: blur(10px); // 尝试保留，部分新机型支持 */
+}
