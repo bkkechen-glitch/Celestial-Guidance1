@@ -203,10 +203,10 @@ export const FortuneView: React.FC = () => {
         score: Math.round((result.love + result.work + result.health + result.money) / 4) 
       });
     } catch (err: any) {
-      // 捕获特定错误并展示详细引导
+      // 增强后的错误诊断 UI
       const msg = err.message || "";
       if (msg === "API_KEY_MISSING") {
-        setError("配置错误：Vercel 环境变量中未检测到 API_KEY。请确保设置了名称为 API_KEY 的变量，并重新部署项目。");
+        setError(`配置错误：未检测到有效 API_KEY。\n\n操作指南：\n1. 在 Vercel 项目设置中添加名为 "API_KEY" 的变量。\n2. 建议同时添加名为 "VITE_API_KEY" 的变量。\n3. 修改环境变量后必须执行一次 "Redeploy" 才能生效。`);
       } else {
         setError(`星象感应中断: ${msg || "请检查网络或配置"}`);
       }
@@ -279,11 +279,11 @@ export const FortuneView: React.FC = () => {
 
       {error ? (
         <div className="text-center space-y-4 pt-10 px-4">
-          <div className="text-rose-400 p-4 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-xs font-mono break-all whitespace-pre-wrap leading-relaxed">
-             <i className="fas fa-circle-exclamation mr-2 text-base block mb-2"></i>
+          <div className="text-rose-400 p-6 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-xs font-mono break-all whitespace-pre-wrap leading-relaxed text-left">
+             <i className="fas fa-circle-exclamation mr-2 text-base block mb-3 text-center"></i>
              {error}
           </div>
-          <button onClick={handleBack} className={`px-6 py-2 rounded-full text-indigo-400 border border-indigo-500/30 ${theme === 'dark' ? 'bg-purple-600/20' : 'bg-indigo-50/50'}`}>返回重试</button>
+          <button onClick={handleBack} className={`px-8 py-3 rounded-full text-indigo-400 font-bold border border-indigo-500/30 ${theme === 'dark' ? 'bg-purple-600/20' : 'bg-indigo-50/50'} hover:bg-indigo-500/10 transition-colors`}>返回并尝试重修星轨</button>
         </div>
       ) : (
         <>
