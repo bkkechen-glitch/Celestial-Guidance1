@@ -7,6 +7,7 @@ interface FortuneCardProps {
   fortune: FortuneResult;
   onBack: () => void;
   signName: string;
+  userName?: string;
 }
 
 const StarRating: React.FC<{ value: number; color: string }> = ({ value, color }) => {
@@ -21,7 +22,7 @@ const StarRating: React.FC<{ value: number; color: string }> = ({ value, color }
   );
 };
 
-export const FortuneCard: React.FC<FortuneCardProps> = ({ fortune, onBack, signName }) => {
+export const FortuneCard: React.FC<FortuneCardProps> = ({ fortune, onBack, signName, userName }) => {
   const { theme } = useTheme();
   
   const handleShare = async () => {
@@ -29,7 +30,7 @@ export const FortuneCard: React.FC<FortuneCardProps> = ({ fortune, onBack, signN
     
     const shareData = {
       title: `${signName}今日运势`,
-      text: `【星语占卜】${signName}今日星语：${fortune.summary}\n建议：${fortune.suggestion}`,
+      text: `【星语占卜】${userName ? userName + '的' : ''}${signName}今日星语：${fortune.summary}\n建议：${fortune.suggestion}`,
       url: currentUrl,
     };
 
@@ -55,9 +56,12 @@ export const FortuneCard: React.FC<FortuneCardProps> = ({ fortune, onBack, signN
         <button onClick={onBack} className="text-slate-400 hover:text-indigo-500 transition-colors">
           <i className="fas fa-chevron-left mr-2"></i> 返回
         </button>
-        <h2 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-pink-500">
-          {signName} · 今日运势
-        </h2>
+        <div className="text-right">
+          <h2 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-pink-500">
+            {signName} · 今日运势
+          </h2>
+          {userName && <p className="text-[10px] text-slate-500">测算对象: {userName}</p>}
+        </div>
         <button onClick={handleShare} className="text-slate-400 hover:text-purple-500 transition-colors">
           <i className="fas fa-share-nodes"></i>
         </button>

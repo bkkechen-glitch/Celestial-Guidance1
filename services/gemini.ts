@@ -32,13 +32,14 @@ const getAIInstance = () => {
   return new GoogleGenAI({ apiKey });
 };
 
-export const getDailyFortune = async (sign: string): Promise<FortuneResult> => {
+export const getDailyFortune = async (sign: string, userName: string, birthday: string, seed: number): Promise<FortuneResult> => {
   try {
     const ai = getAIInstance();
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
-      contents: `请作为一名资深占星师，为${sign}提供今日(包含爱情、事业、健康、财运)的运势分析。请用温暖且富有洞察力的语言。`,
+      contents: `请作为一名资深占星师，为名为"${userName}"（出生日期：${birthday}）的${sign}用户提供今日专属运势分析。请根据这些个人信息提供针对性的温暖且富有洞察力的语言。`,
       config: {
+        seed: seed, // 传入种子确保同一天结果一致
         responseMimeType: "application/json",
         responseSchema: {
           type: Type.OBJECT,
