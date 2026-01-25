@@ -3,43 +3,36 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { FortuneResult, MatchResult, MysteryBoxResult } from "../types";
 
 /**
- * 获取 API Key 的最终解决方案
+ * 辅助函数：清洗模型返回的内容
  */
-const getApiKey = () => {
-  // 1. 优先尝试 Vite 规范的客户端变量 (VITE_API_KEY)
-  // @ts-ignore
-  const viteKey = typeof import.meta !== 'undefined' && import.meta.env ? (import.meta.env.VITE_API_KEY || import.meta.env.API_KEY) : '';
-  
-  // 2. 尝试标准 process.env (Vercel 环境)
-  // @ts-ignore
-  const processKey = typeof process !== 'undefined' && process.env ? process.env.API_KEY : '';
-
-  // 3. 尝试从 window 对象获取 (作为最后手段)
-  // @ts-ignore
-  const windowKey = typeof window !== 'undefined' ? (window.VITE_API_KEY || window.API_KEY) : '';
-
-  const finalKey = viteKey || processKey || windowKey;
-  
-  return finalKey ? finalKey.trim() : '';
+const cleanJsonResponse = (text: string): string => {
+  return text.replace(/```json\n?|```/g, "").trim();
 };
 
-const getAIInstance = () => {
-  const apiKey = getApiKey();
+/**
+ * 获取 AI 实例
+ * 根据规范，必须且仅能从 process.env.API_KEY 获取
+ */
+const getAiInstance = () => {
+  // 注意：在 Vercel 静态部署中，构建工具会在打包时替换此值
+  const apiKey = process.env.API_KEY;
+  
   if (!apiKey) {
-    console.error("未找到 API_KEY。请确保在 Vercel 中配置了 VITE_API_KEY 环境变量。");
+    console.error("Critical Error: process.env.API_KEY is undefined. Please check Vercel Environment Variables.");
     throw new Error("API_KEY_MISSING");
   }
+  
   return new GoogleGenAI({ apiKey });
 };
 
 export const getDailyFortune = async (sign: string, userName: string, birthday: string, seed: number): Promise<FortuneResult> => {
   try {
-    const ai = getAIInstance();
+    const ai = getAiInstance();
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
       contents: `请作为一名资深占星师，为名为"${userName}"（出生日期：${birthday}）的${sign}用户提供今日专属运势分析。请根据这些个人信息提供针对性的温暖且富有洞察力的语言。`,
       config: {
-        seed: seed, // 传入种子确保同一天结果一致
+        seed: seed,
         responseMimeType: "application/json",
         responseSchema: {
           type: Type.OBJECT,
@@ -59,24 +52,20 @@ export const getDailyFortune = async (sign: string, userName: string, birthday: 
       }
     });
 
-    if (!response.text) throw new Error("EMPTY_RESPONSE");
-    return JSON.parse(response.text);
+    const text = response.text;
+    if (!text) throw new Error("EMPTY_RESPONSE");
+    
+    return JSON.parse(cleanJsonResponse(text));
   } catch (error: any) {
-    console.error("Gemini API 错误详情:", error);
-    if (error.message === "API_KEY_MISSING") {
-      throw new Error("配置缺失：请在 Vercel 设置中添加 VITE_API_KEY。");
-    }
-    const msg = error.toString();
-    if (msg.includes("fetch") || msg.includes("Network")) {
-      throw new Error("网络错误：浏览器无法连接到 Google API，请检查网络环境。");
-    }
-    throw new Error(`星象解析失败: ${error.message || '未知错误'}`);
+    console.error("Gemini API Error (DailyFortune):", error);
+    if (error.message === "API_KEY_MISSING") throw error;
+    throw new Error(error.message || "星象解析失败");
   }
 };
 
 export const getMatchAnalysis = async (sign1: string, sign2: string): Promise<MatchResult> => {
   try {
-    const ai = getAIInstance();
+    const ai = getAiInstance();
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
       contents: `分析${sign1}和${sign2}的恋爱匹配度，包括性格契合度、潜在矛盾和相处建议。`,
@@ -93,15 +82,18 @@ export const getMatchAnalysis = async (sign1: string, sign2: string): Promise<Ma
         }
       }
     });
-    return JSON.parse(response.text);
+    const text = response.text;
+    if (!text) throw new Error("EMPTY_RESPONSE");
+    return JSON.parse(cleanJsonResponse(text));
   } catch (error: any) {
+    console.error("Gemini API Error (Match):", error);
     throw error;
   }
 };
 
 export const getMysteryBox = async (sign: string): Promise<MysteryBoxResult> => {
   try {
-    const ai = getAIInstance();
+    const ai = getAiInstance();
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
       contents: `请为${sign}开启性格盲盒。分析其核心性格特征、优势、弱点以及未来的一段运势展望。`,
@@ -120,8 +112,11 @@ export const getMysteryBox = async (sign: string): Promise<MysteryBoxResult> => 
         }
       }
     });
-    return JSON.parse(response.text);
+    const text = response.text;
+    if (!text) throw new Error("EMPTY_RESPONSE");
+    return JSON.parse(cleanJsonResponse(text));
   } catch (error: any) {
+    console.error("Gemini API Error (MysteryBox):", error);
     throw error;
   }
 };

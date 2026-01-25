@@ -175,7 +175,6 @@ export const FortuneView: React.FC = () => {
 
   const initiateFortune = (sign: ZodiacSignInfo) => {
     setSelectedSign(sign);
-    // 每次进入都回显最新的个人资料
     setUserName(localStorage.getItem('zodiac_user_name') || '');
     setUserBirthday(localStorage.getItem('zodiac_user_birthday') || '');
     setShowInput(true);
@@ -203,8 +202,14 @@ export const FortuneView: React.FC = () => {
         summary: result.summary, 
         score: Math.round((result.love + result.work + result.health + result.money) / 4) 
       });
-    } catch (err) {
-      setError('星象感应中断，请稍后再试...');
+    } catch (err: any) {
+      // 捕获特定错误并展示详细引导
+      const msg = err.message || "";
+      if (msg === "API_KEY_MISSING") {
+        setError("配置错误：Vercel 环境变量中未检测到 API_KEY。请确保设置了名称为 API_KEY 的变量，并重新部署项目。");
+      } else {
+        setError(`星象感应中断: ${msg || "请检查网络或配置"}`);
+      }
       console.error(err);
     } finally {
       setLoading(false);
@@ -273,8 +278,11 @@ export const FortuneView: React.FC = () => {
       )}
 
       {error ? (
-        <div className="text-center space-y-4 pt-20">
-          <p className="text-rose-400">{error}</p>
+        <div className="text-center space-y-4 pt-10 px-4">
+          <div className="text-rose-400 p-4 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-xs font-mono break-all whitespace-pre-wrap leading-relaxed">
+             <i className="fas fa-circle-exclamation mr-2 text-base block mb-2"></i>
+             {error}
+          </div>
           <button onClick={handleBack} className={`px-6 py-2 rounded-full text-indigo-400 border border-indigo-500/30 ${theme === 'dark' ? 'bg-purple-600/20' : 'bg-indigo-50/50'}`}>返回重试</button>
         </div>
       ) : (
